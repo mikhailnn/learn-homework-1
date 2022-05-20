@@ -12,6 +12,10 @@
   бота отвечать, в каком созвездии сегодня находится планета.
 
 """
+import ephem
+
+from datetime import datetime
+
 import logging
 
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
@@ -19,15 +23,6 @@ from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO,
                     filename='bot.log')
-
-
-PROXY = {
-    'proxy_url': 'socks5://t1.learn.python.ru:1080',
-    'urllib3_proxy_kwargs': {
-        'username': 'learn',
-        'password': 'python'
-    }
-}
 
 
 def greet_user(update, context):
@@ -41,13 +36,46 @@ def talk_to_me(update, context):
     print(user_text)
     update.message.reply_text(text)
 
+def planet_constellation(update, context):
+    user_text = update.message.text
+    planet = user_text.split()[1]
+    print(planet)
+    dt_now = datetime.now()
+    dt_now = dt_now.strftime('%Y/%m/%d')
+    print(dt_now)
+    planet_list = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune', 'Pluto', 'Sun']
+    if planet in planet_list:
+        if planet == 'Mercury':
+            ephem_planet = ephem.Mercury(dt_now)           
+        elif planet == 'Venus':
+            ephem_planet = ephem.Venus(dt_now)
+        elif planet == 'Mars':
+            ephem_planet = ephem.Mars(dt_now)
+        elif planet == 'Jupiter':
+            ephem_planet = ephem.Jupiter(dt_now)
+        elif planet == 'Saturn':
+            ephem_planet = ephem.Saturn(dt_now)
+        elif planet == 'Uranus':
+            ephem_planet = ephem.Uranus(dt_now)
+        elif planet == 'Neptune':
+            ephem_planet = ephem.Neptune(dt_now)
+        elif planet == 'Pluto':
+            ephem_planet = ephem.Pluto(dt_now)
+        elif planet == 'Sun':
+            ephem_planet = ephem.Sun(dt_now)
+        constellation = ephem.constellation(ephem_planet)
+        print(constellation)
+        update.message.reply_text(f'Планета {planet} находится в созвездии {constellation[1]}')
+    else:
+        update.message.reply_text(f'Не знаю планеты {planet}')        
 
 def main():
-    mybot = Updater("КЛЮЧ, КОТОРЫЙ НАМ ВЫДАЛ BotFather", request_kwargs=PROXY, use_context=True)
-
+    mybot = Updater("5356104752:AAE0vTxK0mFBoW-j3Z_cc6lWOzEuAkloPDo", use_context=True)
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
+    dp.add_handler(CommandHandler("planet", planet_constellation))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
+    
 
     mybot.start_polling()
     mybot.idle()
