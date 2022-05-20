@@ -27,18 +27,18 @@ logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
                     filename='bot.log')
 
 
-def greet_user(update, context):
+def greet_user(update, text):
     text = 'Вызван /start'
     print(text)
     update.message.reply_text(text)
 
 
-def talk_to_me(update, context):
+def talk_to_me(update, text):
     user_text = update.message.text
     print(user_text)
-    update.message.reply_text(text)
+    update.message.reply_text(user_text)
 
-def planet_constellation(update, context):
+def planet_constellation(update, text):
     user_text = update.message.text
     planet = user_text.split()[1]
     print(planet)
@@ -74,7 +74,7 @@ def planet_constellation(update, context):
 def main():
     mybot = Updater(settings.API_KEY, use_context=True)
     dp = mybot.dispatcher
-    dp.add_handler(CommandHandler("start", greet_user))
+    dp.add_handler(CommandHandler("start", greet_user))    
     dp.add_handler(CommandHandler("planet", planet_constellation))
     dp.add_handler(MessageHandler(Filters.text, talk_to_me))
     
