@@ -18,6 +18,8 @@ from datetime import datetime
 
 import logging
 
+import settings
+
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 
 logging.basicConfig(format='%(name)s - %(levelname)s - %(message)s',
@@ -70,7 +72,7 @@ def planet_constellation(update, context):
         update.message.reply_text(f'Не знаю планеты {planet}')        
 
 def main():
-    mybot = Updater("API_KEY", use_context=True)
+    mybot = Updater(settings.API_KEY, use_context=True)
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("planet", planet_constellation))
