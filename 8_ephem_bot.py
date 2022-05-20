@@ -70,7 +70,7 @@ def planet_constellation(update, context):
         update.message.reply_text(f'Не знаю планеты {planet}')        
 
 def main():
-    mybot = Updater("5356104752:AAE0vTxK0mFBoW-j3Z_cc6lWOzEuAkloPDo", use_context=True)
+    mybot = Updater("API_KEY", use_context=True)
     dp = mybot.dispatcher
     dp.add_handler(CommandHandler("start", greet_user))
     dp.add_handler(CommandHandler("planet", planet_constellation))
